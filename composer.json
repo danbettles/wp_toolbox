@@ -1,0 +1,25 @@
+{
+    "name": "danbettles/wp_toolbox",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dan Bettles",
+            "email": "danbettles@yahoo.co.uk"
+        }
+    ],
+    "autoload": {
+        "psr-4": {"DanBettles\\": "src/DanBettles/"}
+    },
+    "require": {
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.4",
+        "squizlabs/php_codesniffer": "^2.6"
+    },
+    "scripts": {
+        "code:check-quality": [
+            "phpunit -c tests/",
+            "phpcs -np --standard=PSR2 --extensions=php --ignore=/vendor/ ."
+        ]
+    }
+}
