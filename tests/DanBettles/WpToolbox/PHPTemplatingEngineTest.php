@@ -8,7 +8,7 @@ namespace Tests\DanBettles\WpToolbox\PHPTemplatingEngine;
 
 use DanBettles\WpToolbox\PHPTemplatingEngine;
 
-class Test extends \PHPUnit_Framework_TestCase
+class TestCase extends \PHPUnit_Framework_TestCase
 {
     private static function createFixtureFilename($basename)
     {

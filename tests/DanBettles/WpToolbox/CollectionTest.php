@@ -8,7 +8,7 @@ namespace Tests\DanBettles\WpToolbox\Collection;
 
 use DanBettles\WpToolbox\Collection;
 
-class Test extends \PHPUnit_Framework_TestCase
+class TestCase extends \PHPUnit_Framework_TestCase
 {
     public function testIsInstantiable()
     {

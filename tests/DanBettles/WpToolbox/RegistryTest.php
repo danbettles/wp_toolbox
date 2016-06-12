@@ -8,7 +8,7 @@ namespace Tests\DanBettles\WpToolbox\Registry;
 
 use DanBettles\WpToolbox\Registry;
 
-class Test extends \PHPUnit_Framework_TestCase
+class TestCase extends \PHPUnit_Framework_TestCase
 {
     public function testGetinstanceReturnsTheSingleInstanceOfTheClass()
     {
