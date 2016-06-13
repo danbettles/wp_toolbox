@@ -17,14 +17,31 @@ class TestCase extends \PHPUnit_Framework_TestCase
 
     public function testIsInstantiable()
     {
-        new PHPTemplatingEngine();
+        $engine1 = new PHPTemplatingEngine();
+
+        $this->assertEquals([], $engine1->getPathAliases());
+
+        $engine2 = new PHPTemplatingEngine([
+            'bar' => '/foo/bar',
+            'quux' => '/foo/bar/baz/qux/quux'
+        ]);
+
+        $this->assertEquals([
+            'bar' => '/foo/bar',
+            'quux' => '/foo/bar/baz/qux/quux'
+        ], $engine2->getPathAliases());
     }
 
     public function testCreateReturnsANewInstance()
     {
-        $engine = PHPTemplatingEngine::create();
+        $engine1 = PHPTemplatingEngine::create();
 
-        $this->assertInstanceOf('DanBettles\WpToolbox\PHPTemplatingEngine', $engine);
+        $this->assertInstanceOf('DanBettles\WpToolbox\PHPTemplatingEngine', $engine1);
+
+        $engine2 = PHPTemplatingEngine::create(['foo' => 'bar']);
+
+        $this->assertInstanceOf('DanBettles\WpToolbox\PHPTemplatingEngine', $engine2);
+        $this->assertEquals(['foo' => 'bar'], $engine2->getPathAliases());
     }
 
     public static function providesRenderedTemplateOutput()
@@ -58,8 +75,19 @@ END
     /**
      * @dataProvider providesRenderedTemplateOutput
      */
-    public function testRenderRendersTheSpecifiedTemplate($expected, $filename, array $vars)
+    public function testRenderRendersTheTemplateWithTheSpecifiedFilename($expected, $filename, array $vars)
     {
-        $this->assertSame($expected, PHPTemplatingEngine::create()->render($filename, $vars));
+        $engine = new PHPTemplatingEngine();
+
+        $this->assertSame($expected, $engine->render($filename, $vars));
+    }
+
+    public function testRenderRendersTheTemplateWithTheSpecifiedShortenedFilename()
+    {
+        $engine = new PHPTemplatingEngine([
+            'path_alias' => self::createFixtureFilename('aliased_1'),
+        ]);
+
+        $this->assertSame('Hello, World!', $engine->render('path_alias/template.php', ['name' => 'World']));
     }
 }

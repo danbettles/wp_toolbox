@@ -9,26 +9,72 @@ namespace DanBettles\WpToolbox;
 class PHPTemplatingEngine
 {
     /**
+     * @var array
+     */
+    private $pathAliases;
+
+    /**
+     * @param array [$pathAliases = array()]
+     */
+    public function __construct(array $pathAliases = [])
+    {
+        $this->setPathAliases($pathAliases);
+    }
+
+    /**
+     * @param array $pathAliases
+     * @return PHPTemplatingEngine
+     */
+    private function setPathAliases(array $pathAliases)
+    {
+        $this->pathAliases = $pathAliases;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPathAliases()
+    {
+        return $this->pathAliases;
+    }
+
+    /**
      * @param string $filename
      * @param array [$vars = array()]
      * @return string
      */
     public function render($filename, array $vars = [])
     {
+        $finalFilename = $filename;
+
+        foreach ($this->getPathAliases() as $pathAlias => $path) {
+            $expandedFilename = preg_replace('/^' . preg_quote($pathAlias) . '/', $path, $filename);
+
+            if ($expandedFilename !== $filename) {
+                $finalFilename = $expandedFilename;
+                break;
+            }
+        }
+
         extract($vars);
 
         ob_start();
-        require $filename;
+        require $finalFilename;
         $output = ob_get_clean();
 
         return $output;
     }
 
     /**
+     * @see PHPTemplatingEngine::__construct()
      * @return PHPTemplatingEngine
      */
     public static function create()
     {
-        return new self();
+        $class = new \ReflectionClass(get_called_class());
+
+        return $class->newInstanceArgs(func_get_args());
     }
 }
