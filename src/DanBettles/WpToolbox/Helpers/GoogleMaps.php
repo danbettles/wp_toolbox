@@ -49,10 +49,35 @@ class GoogleMaps
      */
     public function createEmbedApiPlaceUrlByAddress($address)
     {
-        $flattenedAddress = preg_replace('/(\r|\n|\r\n)+/', ' ', $address);
-        $placeSearchQuery = urlencode($flattenedAddress);
-        $url = sprintf("https://www.google.com/maps/embed/v1/place?q=%s&key=%s", $placeSearchQuery, $this->getApiKey());
+        return "https://www.google.com/maps/embed/v1/place?" . http_build_query([
+            'q' => self::flattenAddress($address),
+            'key' => $this->getApiKey(),
+        ]);
+    }
 
-        return $url;
+    /**
+     * @param string $address
+     * @return string
+     */
+    private static function flattenAddress($address)
+    {
+        if (!$address) {
+            return $address;
+        }
+
+        return preg_replace('/(\r|\n|\r\n)+/', ' ', $address);
+    }
+
+    /**
+     * @param string $destination
+     * @param string [$start]
+     * @return string
+     */
+    public static function createDirectionsUrl($destination, $start = null)
+    {
+        return 'https://maps.google.com?' . http_build_query([
+            'saddr' => self::flattenAddress($start),
+            'daddr' => self::flattenAddress($destination),
+        ]);
     }
 }
