@@ -84,4 +84,40 @@ class TestCase extends \PHPUnit_Framework_TestCase
             $helper->br()
         );
     }
+
+    public static function providesTextParagraphs()
+    {
+        return [[
+            '<p>something</p>',
+            'something',
+        ], [
+            '<p>foo</p><p>bar</p>',
+            "foo\n\nbar",
+        ], [
+            '<p>foo</p><p>bar</p>',
+            "foo\n\n\n\nbar",
+        ], [
+            '<p>foo</p><p>bar</p>',
+            "foo\r\n\r\nbar",
+        ], [
+            '<p>foo<br/>bar</p>',
+            "foo\nbar",
+        ], [
+            '<p>something</p>',
+            "something\n\n",
+        ], [
+            '<p>something</p>',
+            "\n\nsomething",
+        ]];
+    }
+
+    /**
+     * @dataProvider providesTextParagraphs
+     */
+    public function testParagraphizeWrapsParagraphsInTheSpecifiedTextWithParagraphTags($expected, $input)
+    {
+        $helper = new HTML();
+
+        $this->assertSame($expected, $helper->paragraphize($input));
+    }
 }

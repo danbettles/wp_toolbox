@@ -78,4 +78,23 @@ class HTML
             'href' => 'tel:' . urlencode(str_replace(' ', '', $telephoneNumber)),
         ]);
     }
+
+    /**
+     * Wraps paragraphs with paragraph tags and lone new-line characters with line-breaks.
+     *
+     * @param string $text
+     * @return string
+     */
+    public function paragraphize($text)
+    {
+        $normalized = preg_replace('/(\r\n|\r|\n)/', "\n", trim($text));
+
+        $paragraphized = '';
+
+        foreach (preg_split('/\n{2,}/', $normalized) as $paragraphContent) {
+            $paragraphized .= $this->p(str_replace("\n", $this->br(), $paragraphContent));
+        }
+
+        return $paragraphized;
+    }
 }
