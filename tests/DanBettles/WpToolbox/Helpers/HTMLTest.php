@@ -176,4 +176,19 @@ class TestCase extends \PHPUnit_Framework_TestCase
             ])
         );
     }
+
+    public function testCreateselectEscapesOptionContent()
+    {
+        $html = new HTML();
+
+        $selectHtml = $html->createSelect([
+            'Laurel & Hardy' => 'Laurel & Hardy',
+            'Vic & Bob' => 'Vic & Bob',
+        ], '');
+
+        $this->assertSame(
+            '<select><option value="Laurel &amp; Hardy">Laurel &amp; Hardy</option><option value="Vic &amp; Bob">Vic &amp; Bob</option></select>',
+            $selectHtml
+        );
+    }
 }

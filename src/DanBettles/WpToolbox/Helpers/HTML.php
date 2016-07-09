@@ -62,7 +62,7 @@ class HTML
                 $optionAttributes['selected'] = 'selected';
             }
 
-            $optionsHtml .= $this->option($label, $optionAttributes);
+            $optionsHtml .= $this->option($this->escape($label), $optionAttributes);
         }
 
         return $this->select($optionsHtml, $attributes);
