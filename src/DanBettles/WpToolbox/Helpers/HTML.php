@@ -23,7 +23,7 @@ class HTML
         $attributesHTML = '';
 
         foreach ($attributes as $attrName => $attrValue) {
-            $attributesHTML .= " {$attrName}=\"{$attrValue}\"";
+            $attributesHTML .= sprintf(' %s="%s"', $attrName, $this->escape($attrValue));
         }
 
         if ($html === null) {
@@ -96,5 +96,16 @@ class HTML
         }
 
         return $paragraphized;
+    }
+
+    /**
+     * Escapes the specified string.
+     *
+     * @param string $string
+     * @return string
+     */
+    public function escape($string)
+    {
+        return htmlspecialchars($string, ENT_COMPAT);
     }
 }
