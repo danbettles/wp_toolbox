@@ -47,19 +47,29 @@ class HTML
 
     /**
      * @param array $options
-     * @param string|null [$selectedValue = null]
+     * @param string|null|array [$selection = null]
      * @param array [$attributes = array()]
      * @return string
+     * @throws InvalidArgumentException If an array of selected values was passed but the SELECT is not marked as multiple.
      */
-    public function createSelect(array $options, $selectedValue = null, array $attributes = [])
+    public function createSelect(array $options, $selection = null, array $attributes = [])
     {
+        if (is_array($selection) && !array_key_exists('multiple', $attributes)) {
+            throw new \InvalidArgumentException(
+                'An array of selected values was passed but the SELECT is not marked as multiple.'
+            );
+        }
+
         $optionsHtml = '';
 
         foreach ($options as $value => $label) {
             $optionAttributes = ['value' => $value];
 
-            if (null !== $selectedValue && 0 === strcmp($selectedValue, $value)) {
-                $optionAttributes['selected'] = 'selected';
+            foreach ((array) $selection as $selectedValue) {
+                if (null !== $selectedValue && 0 === strcmp($selectedValue, $value)) {
+                    $optionAttributes['selected'] = 'selected';
+                    break;
+                }
             }
 
             $optionsHtml .= $this->option($this->escape($label), $optionAttributes);

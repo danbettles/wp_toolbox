@@ -191,4 +191,37 @@ class TestCase extends \PHPUnit_Framework_TestCase
             $selectHtml
         );
     }
+
+    public function testCreateselectSupportsTheMultipleAttribute()
+    {
+        $html = new HTML();
+
+        $selectHtml = $html->createSelect([
+            0 => 'Buddha',
+            1 => 'Dharma',
+            2 => 'Sangha',
+        ], [0, 1], [
+            'multiple' => 'multiple',
+        ]);
+
+        $this->assertSame(
+            '<select multiple="multiple"><option value="0" selected="selected">Buddha</option><option value="1" selected="selected">Dharma</option><option value="2">Sangha</option></select>',
+            $selectHtml
+        );
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage An array of selected values was passed but the SELECT is not marked as multiple.
+     */
+    public function testCreateselectThrowsAnExceptionIfAnArrayOfSelectedValuesWasPassedButTheSelectIsNotMarkedAsMultiple()
+    {
+        $html = new HTML();
+
+        $html->createSelect([
+            0 => 'Buddha',
+            1 => 'Dharma',
+            2 => 'Sangha',
+        ], [0, 1]);
+    }
 }
