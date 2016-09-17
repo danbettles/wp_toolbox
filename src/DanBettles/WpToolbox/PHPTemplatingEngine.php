@@ -22,12 +22,28 @@ class PHPTemplatingEngine
     }
 
     /**
+     * @param string $alias
+     * @param string $path
+     * @return PHPTemplatingEngine
+     */
+    public function addPathAlias($alias, $path)
+    {
+        $this->pathAliases[$alias] = $path;
+
+        return $this;
+    }
+
+    /**
      * @param array $pathAliases
      * @return PHPTemplatingEngine
      */
     private function setPathAliases(array $pathAliases)
     {
-        $this->pathAliases = $pathAliases;
+        $this->pathAliases = [];
+
+        foreach ($pathAliases as $alias => $path) {
+            $this->addPathAlias($alias, $path);
+        }
 
         return $this;
     }

@@ -90,4 +90,16 @@ END
 
         $this->assertSame('Hello, World!', $engine->render('path_alias/template.php', ['name' => 'World']));
     }
+
+    public function testAddpathaliasAddsAPathAlias()
+    {
+        $engine = PHPTemplatingEngine::create(['foo' => 'path/to/foo'])
+            ->addPathAlias('bar', 'path/to/bar')
+        ;
+
+        $this->assertEquals([
+            'foo' => 'path/to/foo',
+            'bar' => 'path/to/bar',
+        ], $engine->getPathAliases());
+    }
 }
